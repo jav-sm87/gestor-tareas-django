@@ -1,0 +1,63 @@
+{% extends "core/base.html" %}
+{% block titulo %}Tareas{% endblock %}
+{% block contenido %}
+<div style="display:flex;justify-content:space-between;align-items:center;">
+    <h1>Mis tareas</h1>
+    <a class="btn" href="{% url 'tarea_crear' %}">+ Nueva tarea</a>
+</div>
+
+<div class="card">
+    <form method="get" style="display:flex;gap:1rem;align-items:end;flex-wrap:wrap;">
+        <div style="flex:1;min-width:180px;">
+            <label for="q">Buscar</label>
+            <input type="text" id="q" name="q" value="{{ busqueda_actual }}" placeholder="Título o descripción">
+        </div>
+        <div style="min-width:160px;">
+            <label for="estado">Estado</label>
+            <select id="estado" name="estado">
+                <option value="">Todos</option>
+                {% for valor, etiqueta in estados %}
+                    <option value="{{ valor }}" {% if valor == estado_actual %}selected{% endif %}>{{ etiqueta }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn">Filtrar</button>
+    </form>
+</div>
+
+{% if tareas %}
+    <div class="card">
+        <table>
+            <thead>
+                <tr><th>Título</th><th>Proyecto</th><th>Estado</th><th>Prioridad</th><th>Fecha límite</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for tarea in tareas %}
+                    <tr>
+                        <td><a href="{% url 'tarea_detalle' tarea.pk %}">{{ tarea.titulo }}</a></td>
+                        <td>{{ tarea.proyecto.nombre }}</td>
+                        <td><span class="etiqueta estado-{{ tarea.estado }}">{{ tarea.get_estado_display }}</span></td>
+                        <td>{{ tarea.get_prioridad_display }}</td>
+                        <td>{{ tarea.fecha_limite|date:"d/m/Y"|default:"—" }}</td>
+                        <td>
+                            <a href="{% url 'tarea_editar' tarea.pk %}">Editar</a> ·
+                            <a href="{% url 'tarea_eliminar' tarea.pk %}">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+        <div>
+            {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}
+        </div>
+    {% endif %}
+{% else %}
+    <div class="card">
+        <p>No se encontraron tareas.</p>
+    </div>
+{% endif %}
+{% endblock %}

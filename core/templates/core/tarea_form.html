@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% block titulo %}{% if tarea %}Editar tarea{% else %}Nueva tarea{% endif %}{% endblock %}
+{% block contenido %}
+<div class="card" style="max-width:600px;">
+    <h1>{% if tarea %}Editar tarea{% else %}Nueva tarea{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <p>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            </p>
+        {% endfor %}
+        <button type="submit" class="btn">Guardar</button>
+        <a class="btn btn-secundario" href="{% url 'tarea_lista' %}">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% block titulo %}{% if proyecto %}Editar proyecto{% else %}Nuevo proyecto{% endif %}{% endblock %}
+{% block contenido %}
+<div class="card" style="max-width:500px;">
+    <h1>{% if proyecto %}Editar proyecto{% else %}Nuevo proyecto{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <p>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            </p>
+        {% endfor %}
+        <button type="submit" class="btn">Guardar</button>
+        <a class="btn btn-secundario" href="{% url 'proyecto_lista' %}">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "core/base.html" %}
+{% block titulo %}Panel principal{% endblock %}
+{% block contenido %}
+<h1>Bienvenido, {{ user.username }}</h1>
+
+<div class="stats">
+    <div class="card stat">
+        <div class="numero">{{ total_proyectos }}</div>
+        <div>Proyectos</div>
+    </div>
+    <div class="card stat">
+        <div class="numero">{{ total_tareas }}</div>
+        <div>Tareas totales</div>
+    </div>
+    <div class="card stat">
+        <div class="numero">{{ tareas_pendientes }}</div>
+        <div>Pendientes</div>
+    </div>
+    <div class="card stat">
+        <div class="numero">{{ tareas_completadas }}</div>
+        <div>Completadas</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Proyectos recientes</h2>
+    {% if proyectos_recientes %}
+        <ul>
+            {% for proyecto in proyectos_recientes %}
+                <li><a href="{% url 'proyecto_detalle' proyecto.pk %}">{{ proyecto.nombre }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aún no tienes proyectos. <a href="{% url 'proyecto_crear' %}">Crea el primero</a>.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Tareas recientes</h2>
+    {% if tareas_recientes %}
+        <ul>
+            {% for tarea in tareas_recientes %}
+                <li>
+                    <a href="{% url 'tarea_detalle' tarea.pk %}">{{ tarea.titulo }}</a>
+                    <span class="etiqueta estado-{{ tarea.estado }}">{{ tarea.get_estado_display }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay tareas registradas todavía.</p>
+    {% endif %}
+</div>
+{% endblock %}

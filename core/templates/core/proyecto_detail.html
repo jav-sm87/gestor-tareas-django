@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+{% block titulo %}{{ proyecto.nombre }}{% endblock %}
+{% block contenido %}
+<div style="display:flex;justify-content:space-between;align-items:center;">
+    <h1>{{ proyecto.nombre }}</h1>
+    <div>
+        <a class="btn btn-secundario" href="{% url 'proyecto_editar' proyecto.pk %}">Editar</a>
+        <a class="btn btn-peligro" href="{% url 'proyecto_eliminar' proyecto.pk %}">Eliminar</a>
+    </div>
+</div>
+
+<div class="card">
+    <p>{{ proyecto.descripcion|default:"Sin descripción." }}</p>
+    <p><small>Creado el {{ proyecto.fecha_creacion|date:"d/m/Y H:i" }}</small></p>
+</div>
+
+<div class="card">
+    <h2>Tareas del proyecto</h2>
+    {% if proyecto.tareas.all %}
+        <table>
+            <thead><tr><th>Título</th><th>Estado</th><th>Prioridad</th><th>Fecha límite</th></tr></thead>
+            <tbody>
+                {% for tarea in proyecto.tareas.all %}
+                    <tr>
+                        <td><a href="{% url 'tarea_detalle' tarea.pk %}">{{ tarea.titulo }}</a></td>
+                        <td><span class="etiqueta estado-{{ tarea.estado }}">{{ tarea.get_estado_display }}</span></td>
+                        <td>{{ tarea.get_prioridad_display }}</td>
+                        <td>{{ tarea.fecha_limite|date:"d/m/Y"|default:"—" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Este proyecto aún no tiene tareas.</p>
+    {% endif %}
+    <a class="btn" href="{% url 'tarea_crear' %}">+ Nueva tarea</a>
+</div>
+
+<a href="{% url 'proyecto_lista' %}">← Volver a proyectos</a>
+{% endblock %}

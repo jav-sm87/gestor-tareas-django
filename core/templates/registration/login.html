@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% block titulo %}Iniciar sesión{% endblock %}
+{% block contenido %}
+<div class="card" style="max-width:400px;margin:0 auto;">
+    <h1>Iniciar sesión</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <p>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            </p>
+        {% endfor %}
+        <button type="submit" class="btn">Entrar</button>
+    </form>
+    <p style="margin-top:1rem;">¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a></p>
+</div>
+{% endblock %}

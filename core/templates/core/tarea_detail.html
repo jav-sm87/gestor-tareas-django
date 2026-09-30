@@ -1,0 +1,22 @@
+{% extends "core/base.html" %}
+{% block titulo %}{{ tarea.titulo }}{% endblock %}
+{% block contenido %}
+<div style="display:flex;justify-content:space-between;align-items:center;">
+    <h1>{{ tarea.titulo }}</h1>
+    <div>
+        <a class="btn btn-secundario" href="{% url 'tarea_editar' tarea.pk %}">Editar</a>
+        <a class="btn btn-peligro" href="{% url 'tarea_eliminar' tarea.pk %}">Eliminar</a>
+    </div>
+</div>
+
+<div class="card">
+    <p>{{ tarea.descripcion|default:"Sin descripción." }}</p>
+    <p><strong>Proyecto:</strong> <a href="{% url 'proyecto_detalle' tarea.proyecto.pk %}">{{ tarea.proyecto.nombre }}</a></p>
+    <p><strong>Asignado a:</strong> {{ tarea.asignado_a.username }}</p>
+    <p><strong>Estado:</strong> <span class="etiqueta estado-{{ tarea.estado }}">{{ tarea.get_estado_display }}</span></p>
+    <p><strong>Prioridad:</strong> {{ tarea.get_prioridad_display }}</p>
+    <p><strong>Fecha límite:</strong> {{ tarea.fecha_limite|date:"d/m/Y"|default:"Sin definir" }}</p>
+</div>
+
+<a href="{% url 'tarea_lista' %}">← Volver a tareas</a>
+{% endblock %}

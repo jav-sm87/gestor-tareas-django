@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+{% block titulo %}Proyectos{% endblock %}
+{% block contenido %}
+<div style="display:flex;justify-content:space-between;align-items:center;">
+    <h1>Mis proyectos</h1>
+    <a class="btn" href="{% url 'proyecto_crear' %}">+ Nuevo proyecto</a>
+</div>
+
+{% if proyectos %}
+    <div class="card">
+        <table>
+            <thead>
+                <tr><th>Nombre</th><th>Tareas</th><th>Creado</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for proyecto in proyectos %}
+                    <tr>
+                        <td><a href="{% url 'proyecto_detalle' proyecto.pk %}">{{ proyecto.nombre }}</a></td>
+                        <td>{{ proyecto.tareas.count }}</td>
+                        <td>{{ proyecto.fecha_creacion|date:"d/m/Y" }}</td>
+                        <td>
+                            <a href="{% url 'proyecto_editar' proyecto.pk %}">Editar</a> ·
+                            <a href="{% url 'proyecto_eliminar' proyecto.pk %}">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+        <div>
+            {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}
+        </div>
+    {% endif %}
+{% else %}
+    <div class="card">
+        <p>Todavía no tienes proyectos creados.</p>
+    </div>
+{% endif %}
+{% endblock %}

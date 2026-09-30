@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+{% block titulo %}Registro{% endblock %}
+{% block contenido %}
+<div class="card" style="max-width:420px;margin:0 auto;">
+    <h1>Crear cuenta</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <p>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                {{ field.errors }}
+            </p>
+        {% endfor %}
+        <button type="submit" class="btn">Registrarme</button>
+    </form>
+    <p style="margin-top:1rem;">¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+</div>
+{% endblock %}
